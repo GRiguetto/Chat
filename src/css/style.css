@@ -1,0 +1,88 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container{
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box{
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0,0,0,0.1);
+    text-align: center;
+}
+
+.login-box {
+    margin-bottom: 30px;
+    color: #606770;
+}
+
+input-group label{
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    flex-direction: column;
+    gap: 8px;
+
+}
+
+.input-group input{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid#ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding:12px;
+    background-color: #007bff ;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: backgroud-color 0.2s;
+}
+
+button:hover{
+    background-color: #0056b3;
+}
+
+.register-link{
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-link a:hover{
+    text-decoration: underline;
+}
+
+.form{
+     column-gap: 100px;
+     padding: 100px;
+}
+
