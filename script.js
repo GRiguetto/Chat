@@ -53,4 +53,30 @@ document.addEventListener('DOMContentLoaded', () =>{
             alert('Ocorreu um erro ao tentar se cadastrar.');
         }
     });
-})
+
+    loginForm.addEventListener('submit', async (event) =>{
+        event.preventDefault();
+
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const loginData = { email, password};
+
+        try{
+            const response = await fetch('http://localhost:3000/login',{
+                method:'POST',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify(loginData)
+            });
+            const result = await response.json();
+            if (!response.ok){
+                throw new Error(result.error);
+            }
+            alert(result.message);
+
+            console.log("Usuário logado", result.user);
+        }catch (error){
+            console.error('Erro ao enviar formulario de login:', error);
+            alert(error.message);
+        }
+    });
+});
