@@ -1,0 +1,7 @@
+@import url('style.css');
+
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-darkest);
+    color: var(--text)
+}
