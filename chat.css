@@ -166,7 +166,7 @@ body {
  font-size: 1em;
  width: 100%;
  box-sizing: border-box;
- }
+}
 
 .send-icon{
     position: absolute;
@@ -178,6 +178,7 @@ body {
     cursor: pointer;
     transition: color 0.2s;
 }
+
 .send-icon:hover{
     color: var(--color-primary);
 }
