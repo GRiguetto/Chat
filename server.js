@@ -3,7 +3,18 @@ const cors = require('cors');
 const db = require('./database.js');
 const bcrypt = require('bcrypt');
 
+const http = require('http');
+const { Server } = require("socket.io");
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server,{
+    cors:{
+        origin: "*",
+        method:["GET","POST"]
+    }
+});
+
 const PORT = 3000;
 
 app.use(cors());
@@ -71,6 +82,20 @@ app.post('/login', (req, res) => {
                 res.status(400).json({ "error": "Email ou senha inválidos." });
             }
         });
+    });
+});
+
+io.on('connection', (socket) =>{
+    console.log('Um usuário se conectou:', socket.id);
+
+    socket.on('chat message', (msg)=>{
+        console.log('Mensagem recebida:',msg);
+
+        io.emit('chat message', msg);
+    });
+
+    socket.on('disconnet',()=>{
+        console.log('Um usuário se desconectou:', socket.io);
     });
 });
 
