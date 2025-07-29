@@ -4,7 +4,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const messageInput = document.getElementById('message-input');
     const sendIcon = document.getElementById('send-icon');
     const messageList = document.querySelector('.message-list');
-    const usernameDisplay =document.getElementById('username-display');
+    const usernameDisplay = document.getElementById('username-display');
+    
+    const maxLength = messageInput.getAttribute('maxlength');
+    let limitAlertShown = false; 
+
+    messageInput.addEventListener('input', () => {
+        if (messageInput.value.length >= maxLength) {
+            if (!limitAlertShown) {
+                alert('Você atingiu o limite máximo de ' + maxLength + ' caracteres.');
+                limitAlertShown = true;
+            }
+        } else {
+            limitAlertShown = false;
+        }
+    });
 
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 

@@ -79,7 +79,8 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #0b141a; 
+    background-color: #0b141a;
+    min-width: 0; 
 }
 
 .chat-header {
@@ -111,11 +112,15 @@ body {
     max-width: 60%;
     display: flex;
     flex-direction: column;
+    overflow-wrap: break-word;
+    min-width: 0; 
 }
 
 .message p {
     margin: 0;
     margin-bottom: 5px;
+    word-wrap: break-word;
+    white-space: pre-wrap; 
 }
 
 .message span {
@@ -144,8 +149,6 @@ body {
     font-size: 1em;
 }
 
-/* --- Início do Bloco Corrigido --- */
-
 .message-input-area {
     display: flex;
     padding: 10px;
@@ -153,16 +156,14 @@ body {
     align-items: center;
 }
 
-/* Regra para o container que agrupa input e ícone */
 .input-with-icon {
-    position: relative; /* Essencial para posicionar o ícone dentro dele */
-    flex-grow: 1; /* Faz o container ocupar o espaço */
+    position: relative; 
+    flex-grow: 1; 
 }
 
-/* Regra ÚNICA e CORRIGIDA para o campo de texto */
 #message-input {
     flex-grow: 1;
-    /* Adiciona espaço na direita para o texto não ficar atrás do ícone */
+    
     padding: 12px 45px 12px 15px; 
     background-color: var(--background-input);
     border: none;
@@ -170,15 +171,14 @@ body {
     color: var(--text-primary);
     font-size: 1em;
     width: 100%;
-    box-sizing: border-box; /* Garante que o padding não afete a largura total */
+    box-sizing: border-box; 
 }
 
-/* Regra para o ícone de avião */
 .send-icon {
-    position: absolute; /* Posiciona o ícone em relação ao .input-with-icon */
+    position: absolute;
     top: 50%;
-    right: 15px; /* Distância da borda direita */
-    transform: translateY(-50%); /* Alinha o ícone perfeitamente na vertical */
+    right: 15px;  
+    transform: translateY(-50%); 
     font-size: 1.2em;
     color: var(--text-secondary);
     cursor: pointer;
@@ -189,4 +189,3 @@ body {
     color: var(--color-primary);
 }
 
-/* --- Fim do Bloco Corrigido --- */
