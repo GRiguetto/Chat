@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-    const socket = io('http://localhost:3000');
+    const socket = io("http://localhost:3000");
 
     const messageInput = document.getElementById('message-input');
     const sendIcon = document.getElementById('send-icon');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     usernameDisplay.textContent = loggedInUser.name;
 
     function sendMessage(){
-        const messageText=messageInput.ariaValueMax.trim();
+        const messageText=messageInput.value.trim();
 
         if (messageText){
             const messageData={
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
             socket.emit('chat message', messageData);
 
-            messageInput.vallue = '';
+            messageInput.value = '';
             messageInput.focus();
         }
     }
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             messageElement.classList.add('received');
         }
 
-        const senderName=msg.sender.id !== loggedInUser.id !== loggedInUser.id ? `<strong>${msg.sender.name}</strong>` : '';
+        const senderName = msg.sender.id !== loggedInUser.id ? `<strong>${msg.sender.name}</strong>` : ''; // <-- CORRIGIDO
 
         messageElement.innerHTML = `
             ${senderName}

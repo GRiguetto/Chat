@@ -94,11 +94,11 @@ io.on('connection', (socket) =>{
         io.emit('chat message', msg);
     });
 
-    socket.on('disconnet',()=>{
-        console.log('Um usuário se desconectou:', socket.io);
+    socket.on('disconnect',()=>{
+        console.log('Um usuário se desconectou:', socket.id);
     });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
