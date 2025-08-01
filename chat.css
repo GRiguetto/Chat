@@ -139,15 +139,11 @@ body {
     align-self: flex-start; 
 }
 
-#message-input {
-    flex: 1;
-    padding: 12px;
-    background-color: var(--background-input);
-    border: none;
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 1em;
-}
+/* --- Início do Bloco de Limpeza --- */
+/* Remova todas as regras antigas para os elementos abaixo e use apenas estas */
+
+/* --- Início do Bloco de Limpeza e Correção --- */
+/* Remova TODAS as regras antigas para os elementos abaixo e use APENAS estas */
 
 .message-input-area {
     display: flex;
@@ -157,35 +153,61 @@ body {
 }
 
 .input-with-icon {
-    position: relative; 
-    flex-grow: 1; 
+    position: relative; /* ESSENCIAL para o posicionamento absoluto do botão */
+    flex-grow: 1;
+    display: flex;
 }
 
 #message-input {
-    flex-grow: 1;
-    
-    padding: 12px 45px 12px 15px; 
+    width: 100%; /* Ocupa toda a largura do container pai */
+    padding: 12px 50px 12px 15px; /* Adiciona espaço na direita para o botão */
     background-color: var(--background-input);
     border: none;
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 1em;
-    width: 100%;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
-.send-icon {
-    position: absolute;
+/* Estiliza o botão para ser "invisível" e se comportar como um ícone */
+.send-button {
+    position: absolute; /* Tira o botão do fluxo normal e o faz flutuar */
     top: 50%;
-    right: 15px;  
-    transform: translateY(-50%); 
+    right: 8px;
+    transform: translateY(-50%); /* Alinha verticalmente */
+    
+    /* Reseta a aparência padrão do botão */
+    background: transparent;
+    border: none;
+    padding: 8px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    
+    /* Garante o tamanho correto */
+    width: 40px;
+    height: 40px;
+
+    /* Alinha o ícone dentro do botão */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+/* Estiliza o ícone dentro do botão */
+.send-button i {
     font-size: 1.2em;
     color: var(--text-secondary);
-    cursor: pointer;
     transition: color 0.2s;
 }
 
-.send-icon:hover {
+/* Efeito de hover no botão */
+.send-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.send-button:hover i {
     color: var(--color-primary);
 }
 
+/* --- Fim do Bloco de Limpeza e Correção --- */

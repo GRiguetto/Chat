@@ -1,82 +1,111 @@
-document.addEventListener('DOMContentLoaded', ()=>{
-    const socket = io("http://localhost:3000");
+document.addEventListener('DOMContentLoaded', () => {
+    const socket = io('http://localhost:3000');
 
+    // Elementos do DOM
+    const sendButton = document.getElementById('send-button');
     const messageInput = document.getElementById('message-input');
-    const sendIcon = document.getElementById('send-icon');
     const messageList = document.querySelector('.message-list');
     const usernameDisplay = document.getElementById('username-display');
-    
-    const maxLength = messageInput.getAttribute('maxlength');
-    let limitAlertShown = false; 
+    const contactList = document.querySelector('.contact-list');
+    const chatHeaderName = document.querySelector('.chat-header h2');
+    const chatHeaderImg = document.querySelector('.chat-header img');
 
-    messageInput.addEventListener('input', () => {
-        if (messageInput.value.length >= maxLength) {
-            if (!limitAlertShown) {
-                alert('Você atingiu o limite máximo de ' + maxLength + ' caracteres.');
-                limitAlertShown = true;
-            }
-        } else {
-            limitAlertShown = false;
+    // Dados do usuário e da conversa atual
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let currentContact = null;
+
+    if (!loggedInUser) {
+        window.location.href = 'index.html';
+        return;
+    }
+    usernameDisplay.textContent = loggedInUser.name;
+    document.querySelector('.sidebar-header img').src = `https://ui-avatars.com/api/?name=${loggedInUser.name.charAt(0)}&background=9146FF&color=fff`;
+
+    // Função para carregar contatos
+    async function loadContacts() {
+        try {
+            const response = await fetch('http://localhost:3000/users');
+            if (!response.ok) throw new Error('Falha ao buscar contatos.');
+            const { users } = await response.json();
+            
+            contactList.innerHTML = '';
+            users.forEach(user => {
+                if (user.id !== loggedInUser.id) {
+                    const contactElement = document.createElement('div');
+                    contactElement.classList.add('contact-item');
+                    contactElement.dataset.userId = user.id;
+                    contactElement.dataset.userName = user.name;
+                    contactElement.innerHTML = `
+                        <img src="https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}&background=random&color=fff" alt="${user.name}">
+                        <div class="contact-info">
+                            <h3>${user.name}</h3>
+                        </div>
+                    `;
+                    contactList.appendChild(contactElement);
+                }
+            });
+        } catch (error) { console.error(error); }
+    }
+
+    // Função para selecionar um contato
+    contactList.addEventListener('click', (event) => {
+        const contactItem = event.target.closest('.contact-item');
+        if (contactItem) {
+            document.querySelectorAll('.contact-item.active').forEach(item => item.classList.remove('active'));
+            contactItem.classList.add('active');
+            currentContact = {
+                id: parseInt(contactItem.dataset.userId),
+                name: contactItem.dataset.userName
+            };
+            chatHeaderName.textContent = currentContact.name;
+            chatHeaderImg.src = `https://ui-avatars.com/api/?name=${currentContact.name.replace(/\s/g, '+')}&background=3a3a3d&color=fff`;
+            messageList.innerHTML = '';
+            socket.emit('join room', { userId: loggedInUser.id, contactId: currentContact.id });
         }
     });
 
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-    if (!loggedInUser){
-        alert('Você precisa estar logado para acessar o chat.');
-        window.location.href='index.html';
-        return;
+    // Função para renderizar mensagem
+    function renderMessage(msg) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.classList.add(msg.sender_id === loggedInUser.id ? 'sent' : 'received');
+        messageElement.innerHTML = `<p>${msg.message_text}</p><span>${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>`;
+        messageList.appendChild(messageElement);
+        messageList.scrollTop = messageList.scrollHeight;
     }
 
-    usernameDisplay.textContent = loggedInUser.name;
-
-    function sendMessage(){
-        const messageText=messageInput.value.trim();
-
-        if (messageText){
-            const messageData={
-                text: messageText,
-                sender: {
-                    id: loggedInUser.id,
-                    name: loggedInUser.name
-                }
-            };
-
-            socket.emit('chat message', messageData);
-
+    // Função central de envio que SEMPRE previne o recarregamento
+    function handleSendMessage(event) {
+        event.preventDefault(); // <-- A parte mais importante!
+        const messageText = messageInput.value.trim();
+        if (messageText && currentContact) {
+            socket.emit('private message', {
+                senderId: loggedInUser.id,
+                receiverId: currentContact.id,
+                messageText: messageText
+            });
             messageInput.value = '';
             messageInput.focus();
         }
     }
 
-    sendIcon.addEventListener('click', sendMessage);
-
-    messageInput.addEventListener('keypress', (event)=>{
-        if(event.key == 'Enter'){
-            sendMessage();
+    // Adiciona os "escutadores" de evento
+    sendButton.addEventListener('click', handleSendMessage);
+    messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage(event);
         }
     });
 
-    socket.on('chat message', (msg)=>{
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-
-        if(msg.sender.id === loggedInUser.id){
-            messageElement.classList.add('sent');
-        }else{
-            messageElement.classList.add('received');
+    // Ouvintes do Socket.IO
+    socket.on('new message', (msg) => {
+        if (currentContact && (msg.sender_id === currentContact.id || msg.sender_id === loggedInUser.id)) {
+            renderMessage(msg);
         }
+    });
+    socket.on('chat history', (history) => {
+        history.forEach(renderMessage);
+    });
 
-        const senderName = msg.sender.id !== loggedInUser.id ? `<strong>${msg.sender.name}</strong>` : ''; // <-- CORRIGIDO
-
-        messageElement.innerHTML = `
-            ${senderName}
-            <p>${msg.text}</p>
-            <span>${new Date().toLocaleTimeString([],{hour: '2-digit', minute: '2-digit'})}</span>
-        `;
-
-        messageList.appendChild(messageElement);
-
-        messageList.scrollTop=messageList.scrollHeight;
-    })
-})
+    loadContacts();
+});
