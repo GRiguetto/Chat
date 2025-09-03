@@ -2,13 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const socket = io('http://localhost:3000');
 
     // Elementos do DOM
-    const sendButton = document.getElementById('send-button');
-    const messageInput = document.getElementById('message-input');
     const messageList = document.querySelector('.message-list');
     const usernameDisplay = document.getElementById('username-display');
     const contactList = document.querySelector('.contact-list');
     const chatHeaderName = document.querySelector('.chat-header h2');
     const chatHeaderImg = document.querySelector('.chat-header img');
+    
+    // Elementos do Formulário
+    const messageForm = document.getElementById('message-form'); // Pegamos o form
+    const messageInput = document.getElementById('message-input');
 
     // Dados do usuário e da conversa atual
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -21,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     usernameDisplay.textContent = loggedInUser.name;
     document.querySelector('.sidebar-header img').src = `https://ui-avatars.com/api/?name=${loggedInUser.name.charAt(0)}&background=9146FF&color=fff`;
 
-    // Função para carregar contatos
     async function loadContacts() {
         try {
             const response = await fetch('http://localhost:3000/users');
@@ -47,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) { console.error(error); }
     }
 
-    // Função para selecionar um contato
     contactList.addEventListener('click', (event) => {
         const contactItem = event.target.closest('.contact-item');
         if (contactItem) {
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Função para renderizar mensagem
     function renderMessage(msg) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
@@ -74,9 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         messageList.scrollTop = messageList.scrollHeight;
     }
 
-    // Função central de envio que SEMPRE previne o recarregamento
     function handleSendMessage(event) {
-        event.preventDefault(); // <-- A parte mais importante!
+        event.preventDefault(); // <-- A mágica está aqui
         const messageText = messageInput.value.trim();
         if (messageText && currentContact) {
             socket.emit('private message', {
@@ -89,15 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Adiciona os "escutadores" de evento
-    sendButton.addEventListener('click', handleSendMessage);
-    messageInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            handleSendMessage(event);
-        }
-    });
+    // Escutador de evento ÚNICO no formulário
+    messageForm.addEventListener('submit', handleSendMessage);
 
-    // Ouvintes do Socket.IO
     socket.on('new message', (msg) => {
         if (currentContact && (msg.sender_id === currentContact.id || msg.sender_id === loggedInUser.id)) {
             renderMessage(msg);

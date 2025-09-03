@@ -4,6 +4,7 @@ const http = require('http');
 const { Server } = require("socket.io");
 const bcrypt = require('bcrypt');
 const db = require('./database.js');
+const path = require('path'); // <-- Adicione esta linha
 
 const app = express();
 const server = http.createServer(app);
@@ -18,7 +19,12 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+// --- ESTA É A ADIÇÃO MAIS IMPORTANTE ---
+// Serve os arquivos estáticos (HTML, CSS, JS do cliente) da pasta atual
+app.use(express.static(path.join(__dirname, '')));
+// -----------------------------------------
 
+// Suas rotas de API continuam exatamente as mesmas
 app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
     const saltRounds = 10;
@@ -62,7 +68,7 @@ app.get('/users', (req, res) => {
 });
 
 
-
+// Sua lógica do Socket.IO continua exatamente a mesma
 io.on('connection', (socket) => {
     console.log('Um usuário se conectou:', socket.id);
 
@@ -108,4 +114,5 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
     console.log(`Servidor rodando e ouvindo na porta ${PORT}`);
-});
+    console.log(`Acesse o chat em http://localhost:${PORT}`); // <-- Instrução
+}); 
