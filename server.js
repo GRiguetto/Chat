@@ -24,6 +24,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '')));
 // -----------------------------------------
 
+// mapa para associar useris comsocket.id para notificar em tempo real
+const onlineUsers = new Map();
+
 // Suas rotas de API continuam exatamente as mesmas
 app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
@@ -56,6 +59,32 @@ app.post('/login', (req, res) => {
         });
     });
 });
+
+app.get('/users/search', (req, res)=>{
+    const { term, userId } = req.query;
+    if (!term){
+        return res.status(400).json({error: "Termode pesquisa é obrigatorio."});
+    }
+
+    const sql = `
+        SELECT id, name, email FROM users
+        WHERE (name LIKE ? OR email LIKE ?) AND id != ?
+            AND id NOT IN (
+                SELECT user2_id FROM friendships WHERE user1_id = ?
+                UNION
+                SELECT user1_id FROM friendships WHERE user2_id = ?
+            )
+        `;
+
+        const params = [`%${term}%`, `%${term}%`, userId, userId, userId];
+
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+                return res.status(500).json({"error": err.message });
+            }
+            res.json({ users: rows});
+        })
+})
 
 app.get('/users', (req, res) => {
     const sql = "SELECT id, name FROM users";
