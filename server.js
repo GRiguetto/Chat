@@ -129,6 +129,30 @@ app.get('/friend-requests/pending', (req, res) => {
         
 });
 
+// aceitar ou recusar pedidos 
+app.put ('/friend-request/:id',(req, res) =>{
+    const { action, userId } = req.body;
+    const friendshipId = req.params.id;
+
+    if(action === 'accept'){
+        const sql = "UPDATE friendships SET status = 'accepted', action_user_id = ? WHERE id = ?";
+        db.run(sql, [userId, friendshipId], function(err){
+            if (err) return res.status(400).json({"error": err.message });
+            // Notificar o outro usuario que o pedido foi aceito
+            notifyRequestAccepted(friendshipId, userId);
+            res.json({message: "Amizade aceita!"});
+        });
+    }else if (action === 'decline'){
+        const sql = "DELETE FROM friendships WHERE id = ?";
+        db.run(sql, [friendshipId], function(err) {
+            if (err) return res.status(400).json({"error": err.message });
+            res.json({message:"Pedido recusado."});
+        });
+    }else {
+        res.status(400).json({ error: "Ação invalida."});
+    }
+});
+
 app.get('/users', (req, res) => {
     const sql = "SELECT id, name FROM users";
     db.all(sql, [], (err, rows) => {
