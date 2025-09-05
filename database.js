@@ -24,6 +24,17 @@ const db = new sqlite3.Database('./chat.db', (err) => {
                 FOREIGN KEY (receiver_id) REFERENCES users(id)
             )`);
             
+            db.run(`CREATE TABLE IF NOT EXISTS friendships (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user1_id INTEGER,
+                user2_id INTEGER,
+                status TEXT,
+                action_user_id INTEGER,
+                FOREIGN KEY (user1_id) REFERENCES users(id),
+                FOREIGN KEY (user2_id) REFERENCES users(id),
+                FOREIGN KEY (action_user_id) REFERENCES users(id)
+                )`)
+
             console.log("Tabelas 'users' e 'messages' prontas para uso.");
         });
     }
