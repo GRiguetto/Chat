@@ -60,6 +60,8 @@ app.post('/login', (req, res) => {
     });
 });
 
+
+// pesquisar ususario
 app.get('/users/search', (req, res)=>{
     const { term, userId } = req.query;
     if (!term){
@@ -84,6 +86,27 @@ app.get('/users/search', (req, res)=>{
             }
             res.json({ users: rows});
         })
+})
+
+// enviar pedido de amizade
+app.post('/friend-request', (req, res) =>{
+    const { senderId, receiverId } = req.body;
+    const sql = 'INSERT INTO friendships (user1_id, user2_id, status, action_user_id) VALUES (?, ?, ?, ?)';
+    // garante que o ID menorsempre fica em user1 para evitar duplicatas
+    const [user1, user2] = [senderId, receiverId].sort((a,b) => a - b );
+
+    db.run(sql, [user1, user2, 'pending', senderId], function(err){
+        if (err){
+            return res.status(400).json({"error":err.message});
+        }
+        // Notificar ousuarioquerecebeu um convite
+        const receiverSocketId = onlineUsers. get(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit('new_friend_request');
+        }
+        res.json({message: "Pedido de amizade enviando!", id: this.lastID });
+
+    });
 })
 
 app.get('/users', (req, res) => {
