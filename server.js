@@ -109,6 +109,26 @@ app.post('/friend-request', (req, res) =>{
     });
 })
 
+// lista de pedidos de amizade
+app.get('/friend-requests/pending', (req, res) => {
+    const { userId } = req.query;
+    const sql = `
+        SELECT f.id, u.id as user_id, u.name
+        FROM friendships f
+        JOIN users u ON u.id = f.action_user_id
+        WHERE (f.user1_id = ? OR f.user2_id = ?)
+            AND f.status = 'pending'
+            AND f.action_user_id != ?
+        `;
+        db.all(sql, [userId, userId, userId], (err, rows) => {
+            if(err){
+                return res.status(500).json({"error":err.message});
+            }
+            res.json({requests: rows });
+        });
+        
+});
+
 app.get('/users', (req, res) => {
     const sql = "SELECT id, name FROM users";
     db.all(sql, [], (err, rows) => {
