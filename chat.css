@@ -1,7 +1,7 @@
 @import url('style.css'); 
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--background-darkest);
     color: var(--text-primary);
     margin: 0;
@@ -16,16 +16,15 @@ body {
 
 .sidebar {
     width: 30%;
-    max-width: 400px;
+    max-width: 350px;
     background-color: var(--background-container);
-    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
+    border-right: 1px solid var(--border-color);
 }
 
 .sidebar-header {
-    padding: 15px;
-    background-color: #2a2f32; 
+    padding: 20px;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -36,8 +35,8 @@ body {
 }
 
 .user-profile img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 }
 
@@ -48,11 +47,11 @@ body {
 
 .contact-item {
     display: flex;
-    padding: 15px;
+    padding: 15px 20px;
     gap: 15px;
     cursor: pointer;
-    border-bottom: 1px solid var(--border-color);
     transition: background-color 0.2s;
+    border-left: 3px solid transparent;
 }
 
 .contact-item:hover {
@@ -60,12 +59,13 @@ body {
 }
 
 .contact-item.active {
-    background-color: var(--color-primary-hover);
+    background-color: var(--background-input);
+    border-left: 3px solid var(--color-primary);
 }
 
 .contact-item img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 }
 
@@ -74,26 +74,31 @@ body {
     color: var(--text-secondary);
 }
 
-
 .chat-area {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #0b141a;
+    background-color: var(--background-darkest);
     min-width: 0; 
 }
 
 .chat-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 15px;
-    padding: 15px;
-    background-color: #2a2f32;
+    padding: 20px;
+    background-color: var(--background-container);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.chat-header .contact-info {
+    flex-grow: 1;
 }
 
 .chat-header img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 }
 
@@ -103,13 +108,13 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .message {
-    padding: 10px 15px;
-    border-radius: 8px;
-    max-width: 60%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    max-width: 65%;
     display: flex;
     flex-direction: column;
     overflow-wrap: break-word;
@@ -118,124 +123,118 @@ body {
 
 .message p {
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     word-wrap: break-word;
     white-space: pre-wrap; 
 }
 
 .message span {
     font-size: 0.75em;
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.6);
     align-self: flex-end;
 }
 
 .message.sent {
-    background-color: #005C4B; 
-    align-self: flex-end; 
+    background-color: var(--color-primary);
+    color: var(--text-on-color);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
 }
 
 .message.received {
-    background-color: var(--background-container); 
-    align-self: flex-start; 
+    background-color: var(--background-container);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
 }
 
-/* --- Início do Bloco de Limpeza --- */
-/* Remova todas as regras antigas para os elementos abaixo e use apenas estas */
-
-/* --- Início do Bloco de Limpeza e Correção --- */
-/* Remova TODAS as regras antigas para os elementos abaixo e use APENAS estas */
+.message.received span {
+    color: var(--text-secondary);
+}
 
 .message-input-area {
     display: flex;
-    padding: 10px;
-    background-color: #2a2f32;
+    padding: 15px 20px;
+    background-color: var(--background-container);
     align-items: center;
+    border-top: 1px solid var(--border-color);
 }
 
-.input-with-icon {
-    position: relative; /* ESSENCIAL para o posicionamento absoluto do botão */
+#message-form {
+    position: relative;
     flex-grow: 1;
     display: flex;
 }
 
 #message-input {
-    width: 100%; /* Ocupa toda a largura do container pai */
-    padding: 12px 50px 12px 15px; /* Adiciona espaço na direita para o botão */
+    width: 100%;
+    padding: 15px 55px 15px 20px;
     background-color: var(--background-input);
     border: none;
-    border-radius: 8px;
+    border-radius: 25px;
     color: var(--text-primary);
     font-size: 1em;
     box-sizing: border-box;
 }
 
-/* Estiliza o botão para ser "invisível" e se comportar como um ícone */
+#message-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
+}
+
 .send-button {
-    position: absolute; /* Tira o botão do fluxo normal e o faz flutuar */
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%); /* Alinha verticalmente */
-    
-    /* Reseta a aparência padrão do botão */
-    background: transparent;
+    position: absolute;
+    top: 8%;
+    right: 5px;
+    background: var(--color-primary);
     border: none;
-    padding: 8px;
+    padding: 0;
     margin: 0;
     cursor: pointer;
     border-radius: 50%;
-    
-    /* Garante o tamanho correto */
     width: 40px;
     height: 40px;
-
-    /* Alinha o ícone dentro do botão */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s;
 }
 
-/* Estiliza o ícone dentro do botão */
 .send-button i {
-    font-size: 1.2em;
-    color: var(--text-secondary);
-    transition: color 0.2s;
+    font-size: 1.1em;
+    color: var(--text-on-color);
 }
 
-/* Efeito de hover no botão */
-.send-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-.send-button:hover i {
-    color: var(--color-primary);
-}
+ .send-button:hover {
+    background-color: var(--color-primary-hover);
+} 
 
-/* Estilos para o rodapé da Sidebar */
 .sidebar-footer {
-    padding: 15px;
-    border-top: 1px solid #3a3a3d;
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
 }
 
 #add-contact-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #9146FF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    padding: 12px;
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: all 0.3s ease;
 }
 
 #add-contact-btn:hover {
-    background-color: #7a33e0;
+    background-color: var(--color-primary);
+    color: var(--text-on-color);
 }
 
-/* Estilos para o Modal */
 .modal {
     position: fixed;
     z-index: 1000;
@@ -243,26 +242,27 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.7);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #2a2a2d;
-    padding: 20px;
-    border-radius: 8px;
+    background-color: var(--background-container);
+    padding: 25px;
+    border-radius: 12px;
     width: 90%;
     max-width: 400px;
     position: relative;
+    border: 1px solid var(--border-color);
 }
 
 .close-btn {
     color: #aaa;
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -270,16 +270,16 @@ body {
 
 #search-contact-input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
-    border-radius: 5px;
-    border: 1px solid #4a4a4d;
-    background-color: #3a3a3d;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-input);
     color: #fff;
 }
 
 #search-results-list {
-    margin-top: 15px;
+    margin-top: 20px;
     max-height: 200px;
     overflow-y: auto;
 }
@@ -288,23 +288,19 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #3a3a3d;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .add-friend-btn {
-    padding: 5px 10px;
-    background-color: #9146FF;
+    padding: 6px 12px;
+    background-color: var(--color-primary);
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-/* Estilos para Notificações */
-.chat-header {
-    justify-content: space-between;
-}
 .header-icons {
     position: relative;
 }
@@ -314,47 +310,88 @@ body {
 }
 
 #notifications-btn {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     cursor: pointer;
-    color: #b0b3b8;
+    color: var(--text-secondary);
 }
 
 .badge {
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: red;
+    background-color: #E53935; /* Vermelho mais moderno */
     color: white;
     border-radius: 50%;
-    padding: 2px 6px;
+    padding: 3px 7px;
     font-size: 0.7rem;
     font-weight: bold;
 }
 
 .notifications-dropdown {
     position: absolute;
-    top: 30px;
+    top: 40px;
     right: 0;
-    width: 300px;
-    background-color: #2a2a2d;
+    width: 320px;
+    background-color: var(--background-container);
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     z-index: 100;
+    border: 1px solid var(--border-color);
 }
+
 .notification-item {
-    padding: 10px;
+    padding: 12px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #3a3a3d;
+    border-bottom: 1px solid var(--border-color);
 }
+
 .notification-actions button {
-    padding: 4px 8px;
-    margin-left: 5px;
+    padding: 5px 10px;
+    margin-left: 8px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
-.accept-btn { background-color: #28a745; color: white; }
-.decline-btn { background-color: #dc3545; color: white; }
 
+.accept-btn { background-color: #4CAF50; color: white; } /* Verde */
+.decline-btn { background-color: #F44336; color: white; } /* Vermelho */
+
+/* --- Estilos da Barra de Rolagem Personalizada --- */
+
+/* Para navegadores baseados em WebKit (Chrome, Safari, Edge) */
+.contact-list::-webkit-scrollbar,
+.message-list::-webkit-scrollbar,
+#search-results-list::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.contact-list::-webkit-scrollbar-track,
+.message-list::-webkit-scrollbar-track,
+#search-results-list::-webkit-scrollbar-track {
+    background: var(--background-container); /* Cor de fundo da trilha */
+    border-radius: 10px;
+}
+
+.contact-list::-webkit-scrollbar-thumb,
+.message-list::-webkit-scrollbar-thumb,
+#search-results-list::-webkit-scrollbar-thumb {
+    background-color: #4f4f52; /* Cor da barra de rolagem */
+    border-radius: 10px;
+    border: 2px solid var(--background-container); /* Adiciona um preenchimento ao redor da barra */
+}
+
+.contact-list::-webkit-scrollbar-thumb:hover,
+.message-list::-webkit-scrollbar-thumb:hover,
+#search-results-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary-hover); /* Cor da barra ao passar o mouse */
+}
+
+/* Para Firefox */
+.contact-list,
+.message-list,
+#search-results-list {
+    scrollbar-width: thin; /* Deixa a barra mais fina */
+    scrollbar-color: #4f4f52 var(--background-container); /* Cor da barra e da trilha */
+}
