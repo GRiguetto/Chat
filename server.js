@@ -5,6 +5,8 @@ const { Server } = require("socket.io");
 const bcrypt = require('bcrypt');
 const db = require('./database.js');
 const path = require('path');
+const multer = require('multer');
+const path = require('path')
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +21,19 @@ app.use(express.static(path.join(__dirname, '')));
 
 // Mapa para associar userId com socket.id para notificações em tempo real
 const onlineUsers = new Map();
+
+// configuração domulter para upload de aeqiovos
+const storade = multer.diskStorage({
+    destination:function (req, file, cb) {
+        cb(null, 'uploads/'); //salva arquivos em 'uploads' (pasta)
+    },
+    filename: function(req, file, cb){
+        //cria um nome de arquivo para evitar conflitos
+        cb(null, file.fieldname + '-' + Date.now() + path.extraname(file.originalname));
+    }
+});
+
+
 
 // --- LÓGICA DE LOGIN E REGISTRO (Sem alterações) ---
 app.post('/register', (req, res) => {
