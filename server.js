@@ -35,10 +35,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage});
 
-//sirva a pasta uploads
+//sirva a pasta uploads como estatica para que o cliente possa acessar as imagens
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-// --- LÓGICA DE LOGIN E REGISTRO (Sem alterações) ---
 app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
     const saltRounds = 10;
@@ -217,6 +216,20 @@ io.on('connection', (socket) => {
             }
         });
     });
+
+    socket.emit('login_success', { 
+        token, 
+        user: { 
+            id: user.id, 
+            name: user.name, 
+            email: user.email,
+            profile_picture: user.profile_picture,
+            profile_banner: user.profile_banner
+        } 
+    });
+
+    //
+
 
     socket.on('private message', ({ senderId, receiverId, messageText }) => {
         const roomName = [senderId, receiverId].sort().join('-');
