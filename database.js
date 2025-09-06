@@ -10,10 +10,11 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
         
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT, 
-            email TEXT UNIQUE, 
-            password TEXT, 
-            CONSTRAINT email_unique UNIQUE (email)
+            name TEXT NOT NULL, 
+            email TEXT NOT NULL UNIQUE, 
+            password TEXT  NOT NULL, 
+            profile_picture TEXT DEFAULT 'https://ui-avatars.com/api/?name=EU&background=8A2BE2&color=fff',
+            profile_banner TEXT
         )`);
 
         db.run(`CREATE TABLE IF NOT EXISTS messages (
