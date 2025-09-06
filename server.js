@@ -228,63 +228,58 @@ io.on('connection', (socket) => {
         } 
     });
 
-    //rota de login/registro
-    app.post('/api/user/update', upload.fields([{ name: 'avatar', maxCount: 1}, {name:'banner', maxCount: 1}]),(req,res) =>{
-        const {name, email} = req.body;
-        const userId = req.user.id;
 
-        if(!userId){
-            return res.status(401).json({message: 'Não autorizado'});
+    // Adicione esta nova rota DEPOIS das suas rotas de login/registro
+    app.post('/api/user/update', upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), (req, res) => {
+        const { name, email } = req.body;
+        const userId = req.user.id; // Supondo que você tenha um middleware de autenticação que adiciona o usuário ao req
+
+        if (!userId) {
+            return res.status(401).json({ message: 'Não autorizado' });
         }
 
         let updateFields = [];
         let params = [];
 
-        if (name){
+        if (name) {
             updateFields.push('name = ?');
             params.push(name);
         }
-        if (email){
+        if (email) {
             updateFields.push('email = ?');
             params.push(email);
         }
-        if(req.files['avatar']){
-            const avatarPath = '/uploads' + req.files['avatar'][0].filename;
+        if (req.files['avatar']) {
+            const avatarPath = '/uploads/' + req.files['avatar'][0].filename;
             updateFields.push('profile_picture = ?');
             params.push(avatarPath);
         }
-        if(req.files['banner']){
-            const bannerPath = '/uploads' + req.files[banner][0].filename;
+        if (req.files['banner']) {
+            const bannerPath = '/uploads/' + req.files['banner'][0].filename;
             updateFields.push('profile_banner = ?');
             params.push(bannerPath);
         }
 
-        if(updateFields.length === 0){
-            return res.status(400).json({message:'Nenhuma dado para atualizar'});
+        if (updateFields.length === 0) {
+            return res.status(400).json({ message: 'Nenhum dado para atualizar' });
         }
 
         const sql = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
         params.push(userId);
 
         db.run(sql, params, function(err) {
-            if (err){
-                return res.status(500).json({message:'Erro ao atualizar o perfil', error: err.message});
+            if (err) {
+                return res.status(500).json({ message: 'Erro ao atualizar o perfil', error: err.message });
             }
-            // pega os dados atualizadosdo ususarios para retornar
-            db.get('SELECT id, name, email, profile_picture, profile_banner FROM users WHERE id = ?', [userId], (err, user) =>{
-                if (err){
-                    return res.status(500).json({message: 'Erro ao atualizaro perfil', error: err.message});
+            // Pega os dados atualizados do usuário para retornar
+            db.get('SELECT id, name, email, profile_picture, profile_banner FROM users WHERE id = ?', [userId], (err, user) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Erro ao buscar dados atualizados.' });
                 }
-                //traz dados atualizados
-                db.get('SELECT id, name, email, profile_picture, profile_banner FROM users WHERE id = ?', [userId], (err, user) =>{
-                    if (err) {
-                        return res.status(500).json({ message: 'Erro ao buscar dados atualizados.'});
-                    }
-                    res.json({message: 'Perfil atualizado com sucesso', user });
+                res.json({ message: 'Perfil atualizado com sucesso!', user });
 
-                    //Notifica todos os clientes sobre a atualização
-                    io.emit('user_updated' , {userId: user.id, name: user.name, profile_picture:user.profile_picture});
-                });
+                // Notifica todos os clientes sobre a atualização
+                io.emit('user_updated', { userId: user.id, name: user.name, profile_picture: user.profile_picture });
             });
         });
     });
