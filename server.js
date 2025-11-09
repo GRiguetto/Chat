@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const db = require('./database.js');
 const path = require('path');
 const multer = require('multer');
-const path = require('path')
+
 
 const app = express();
 const server = http.createServer(app);
