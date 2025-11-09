@@ -1,0 +1,9 @@
+# Ignora todas as dependências do Node
+node_modules/
+
+# Ignora o banco de dados local (para não sobrescrever o da nuvem)
+chat.db
+
+# Arquivos de sistema
+.DS_Store
+npm-debug.log
