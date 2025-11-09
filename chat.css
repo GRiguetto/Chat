@@ -12,9 +12,11 @@ body {
 
 .chat-container {
     display: flex;
-    height: 100vh;
+    height: 100vh; /* Fallback para navegadores antigos */
+    height: 100dvh; /* Correção para celular */
     width: 100vw;
 }
+
 
 /* --- Sidebar (Contatos) --- */
 .sidebar {
@@ -115,7 +117,7 @@ body {
     flex-grow: 1; /* Garante que o chat-area preencha o espaço */
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%; /* Mude de 100vh para 100% */
     overflow: hidden; /* Previne scroll duplicado */
 }
 
@@ -470,8 +472,9 @@ body {
         position: fixed; /* Fica por cima de tudo */
         left: 0;
         top: 0;
-        height: 100vh;
-        width: 85%; /* Ocupa 85% da tela */
+        height: 100vh; /* Fallback */
+        height: 100dvh; /* Correção para celular */
+        width: 85%;
         max-width: 350px; /* Limite máximo */
         transform: translateX(-100%); /* Começa fora da tela */
         /* CORREÇÃO: z-index da sidebar deve ser menor que o do modal */
