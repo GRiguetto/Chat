@@ -286,21 +286,29 @@ io.on('connection', (socket) => {
 
 
     socket.on('private message', ({ senderId, receiverId, messageText }) => {
-        const roomName = [senderId, receiverId].sort().join('-');
-        const sql = 'INSERT INTO messages (sender_id, receiver_id, message_text) VALUES (?, ?, ?)';
-        db.run(sql, [senderId, receiverId, messageText], function(err) {
-            if (!err) {
-                const newMessage = {
-                    id: this.lastID,
-                    sender_id: senderId,
-                    receiver_id: receiverId,
-                    message_text: messageText,
-                    timestamp: new Date().toISOString()
-                };
-                io.to(roomName).emit('new message', newMessage);
-            }
+    const roomName = [senderId, receiverId].sort().join('-');
+    const sql = 'INSERT INTO messages (sender_id, receiver_id, message_text) VALUES (?, ?, ?)';
+    
+    db.run(sql, [senderId, receiverId, messageText], function(err) {
+        // ---- INÍCIO DA CORREÇÃO ----
+        if (err) {
+            // Isso fará o erro aparecer nos logs do PM2
+            console.error('### ERRO AO SALVAR MENSAGEM NO DB:', err.message);
+            return; // Para a execução aqui se deu erro
+        }
+        // ---- FIM DA CORREÇÃO ----
+
+        // Se não deu erro, continua normalmente:
+        const newMessage = {
+            id: this.lastID,
+            sender_id: senderId,
+            receiver_id: receiverId,
+            message_text: messageText,
+            timestamp: new Date().toISOString()
+        };
+            io.to(roomName).emit('new message', newMessage);
         });
-    });
+    }); 
 
     socket.on('disconnect', () => {
         for (let [userId, id] of onlineUsers.entries()) {
