@@ -217,16 +217,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.emit('login_success', { 
-        token, 
-        user: { 
-            id: user.id, 
-            name: user.name, 
-            email: user.email,
-            profile_picture: user.profile_picture,
-            profile_banner: user.profile_banner
-        } 
-    });
+   
 
 
     // Adicione esta nova rota DEPOIS das suas rotas de login/registro
