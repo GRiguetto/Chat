@@ -34,27 +34,29 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px; /* Adiciona padding para telas de PC */
 }
 
 .login-container {
     width: 100%;
-    max-width: 400px;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .login-box {
     background-color: var(--background-container);
-    padding: 40px;
-    border-radius: 12px; /* Bordas mais arredondadas */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 450px; /* Limite para telas de PC */
     text-align: center;
     border: 1px solid var(--border-color);
-    backdrop-filter: blur(10px); /* Efeito de vidro (opcional) */
 }
 
 .login-box h1 {
-    margin-bottom: 15px;
-    color: var(--text-on-color);
+    font-size: 2em;
     font-weight: 700;
 }
 
@@ -100,32 +102,62 @@ button {
     color: var(--text-on-color);
     border: none;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 1.1em;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: var(--color-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
 }
 
 .register-link {
     margin-top: 25px;
-    font-size: 14px;
+    font-size: 0.9em;
     color: var(--text-secondary);
 }
 
 .register-link a {
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .register-link a:hover {
     text-decoration: underline;
+}
+
+/* --- Responsividade para Celular --- */
+@media (max-width: 600px) {
+    body {
+        padding: 0; /* Remove padding do body no celular */
+        align-items: flex-start; /* Alinha no topo */
+    }
+
+    .login-container {
+        padding: 0;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: none;
+        min-height: 100vh; /* Ocupa a tela inteira */
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        padding-top: 60px; /* Dá espaço para a barra de status */
+    }
+
+    .login-box h1 {
+        font-size: 1.8em;
+    }
+
+    .input-group input {
+        padding: 18px 15px; /* Área de toque maior */
+    }
+
+    button {
+        padding: 18px; /* Botão com área de toque maior */
+    }
 }

@@ -1,84 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    // --- URLs e Elementos ---
+    const API_URL = 'http://102.37.16.141:3000'; // SEU IP CORRIGIDO
+    
     const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form'); 
+    const registerForm = document.getElementById('register-form');
     const showRegisterLink = document.getElementById('show-register-link');
     const showLoginLink = document.getElementById('show-login-link');
 
-    if (showRegisterLink) {
-        showRegisterLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-        });
-    }
+    // --- Lógica para trocar de formulário ---
+    showRegisterLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+    });
 
-    if (showLoginLink) {
-        showLoginLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-        });
-    }
+    showLoginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+    });
 
-    registerForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const name = document.getElementById('register-name').value;
-        const email = document.getElementById('register-email').value;
-        const password = document.getElementById('register-password').value;
-        const userData = { name, email, password };
+    // --- Lógica de Login (Corrigida) ---
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede o recarregamento da página
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
         try {
-            const response = await fetch('http://localhost:3000/register', {
+            const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
+                body: JSON.stringify({ email, password })
             });
+            
+            const data = await response.json();
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Ocorreu um erro desconhecido.');
+            if (response.ok) {
+                // Salva os dados do usuário (incluindo ID e Nome) no localStorage
+                localStorage.setItem('userData', JSON.stringify(data)); 
+                window.location.href = 'chat.html'; // Redireciona para o chat
+            } else {
+                alert(data.error || 'Erro ao fazer login.');
             }
-
-            alert(result.message);
-            window.location.reload();
-
-        } catch (error) {
-            console.error('Erro ao enviar formulário de cadastro:', error);
-            alert(error.message);
+        } catch (err) {
+            console.error('Erro de rede:', err);
+            alert('Erro de conexão com o servidor.');
         }
     });
 
-    loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        const loginData = { email, password };
+    // --- LÓGICA DE CADASTRO (Adicionada) ---
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede o recarregamento da página
+        
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
 
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch(`${API_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify({ name, email, password })
             });
 
-            const result = await response.json();
+            const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Ocorreu um erro desconhecido.');
+            if (response.ok) {
+                alert('Usuário cadastrado com sucesso! Faça o login.');
+                // Limpa o formulário de cadastro
+                registerForm.reset();
+                // Volta para a tela de login
+                showLoginLink.click();
+            } else {
+                alert(data.error || 'Erro ao cadastrar.');
             }
-
-           
-            localStorage.setItem('loggedInUser', JSON.stringify(result.user));
-
-            window.location.href = 'chat.html';
-
-        } catch (error) {
-            console.error('Erro ao enviar formulário de login:', error);
-            alert(error.message);
+        } catch (err) {
+            console.error('Erro de rede:', err);
+            alert('Erro de conexão com o servidor.');
         }
     });
 });

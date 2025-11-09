@@ -14,29 +14,43 @@
 <body>
 
     <div class="chat-container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <header class="sidebar-header">
                 <div class="user-profile">
-                    <img src="https://ui-avatars.com/api/?name=EU&background=9146FF&color=fff" alt="Seu Perfil">
+                    <img src="https://ui-avatars.com/api/?name=EU&background=9146FF&color=fff" alt="Seu Perfil" id="user-profile-pic">
                     <h2 id="username-display">Carregando...</h2>
                 </div>
             </header>
 
-            <div class="contact-list">
+            <div class="contact-list" id="contact-list">
                 </div>
 
-            <div class="sidebar-footer">
-                <button id="add-contact-btn"><i class="fas fa-user-plus"></i> Novo Contato</button>
-            </div>
+            <footer class="sidebar-footer">
+                <button class="icon-button" id="add-contact-btn" title="Adicionar Contato">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                <button class="icon-button" id="logout-btn" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </footer>
         </aside>
+
+        <div class="sidebar-overlay" id="sidebar-overlay" style="display: none;"></div>
 
         <main class="chat-area">
             <header class="chat-header">
-                <img src="https://ui-avatars.com/api/?name=?&background=3a3a3d&color=fff" alt="contato">
-                <h2>Selecione um contato para começar</h2>
-                <div class="header-icons">
+                <button class="icon-button" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="contact-profile" id="chat-header-profile" style="display: none;">
+                    <img src="https" alt="Perfil do Contato">
+                    <h2 id="chat-with-username">Selecione um contato</h2>
+                </div>
+                
+                <div class="header-actions">
                     <div class="notification-wrapper">
-                        <i class="fas fa-bell" id="notifications-btn"></i>
+                        <i class="fas fa-bell icon-button" id="notifications-btn"></i>
                         <span id="notification-badge" class="badge" style="display: none;"></span>
                         <div id="notifications-dropdown" class="notifications-dropdown" style="display: none;">
                             </div>
@@ -44,10 +58,14 @@
                 </div>
             </header>
 
-            <div class="message-list">
+            <div class="message-list" id="message-list">
+                <div class="no-chat-selected" id="no-chat-selected">
+                    <i class="fas fa-comments"></i>
+                    <p>Selecione um contato para iniciar a conversa.</p>
                 </div>
+            </div>
 
-            <footer class="message-input-area">
+            <footer class="message-input-area" id="message-input-area" style="display: none;">
                 <form id="message-form" class="input-with-icon">
                     <input type="text" id="message-input" placeholder="Digite uma mensagem..." autocomplete="off">
                     <button type="submit" class="send-button" id="send-button">
@@ -60,15 +78,15 @@
 
     <div id="add-contact-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn" id="close-modal-btn">&times;</span>
             <h2>Adicionar Novo Contato</h2>
             <input type="text" id="search-contact-input" placeholder="Pesquisar por nome ou e-mail...">
-            <div id="search-results-list"></div>
+            <div id="search-results-list">
+                </div>
         </div>
     </div>
     
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="chat.js"></script>
-
 </body>
 </html>
