@@ -469,15 +469,14 @@ body {
 /* --- Responsividade para Celular (Chat) --- */
 @media (max-width: 768px) {
     .sidebar {
-        position: fixed; /* Fica por cima de tudo */
+        position: fixed; 
         left: 0;
         top: 0;
         height: 100vh; /* Fallback */
-        height: 100dvh; /* Correção para celular */
+        height: 100dvh; 
         width: 85%;
         max-width: 350px; /* Limite máximo */
         transform: translateX(-100%); /* Começa fora da tela */
-        /* CORREÇÃO: z-index da sidebar deve ser menor que o do modal */
         z-index: 1002; 
         border-right: 1px solid var(--border-color);
         box-shadow: 0 0 20px rgba(0,0,0,0.3);
@@ -495,7 +494,6 @@ body {
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        /* CORREÇÃO: z-index do overlay deve ser menor que o da sidebar */
         z-index: 1001;
         display: none; /* Controlado por JS */
     }

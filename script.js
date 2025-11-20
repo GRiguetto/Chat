@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- URLs e Elementos ---
-    const API_URL = 'http://102.37.16.141:3000'; // SEU IP CORRIGIDO
+    const API_URL = 'http://102.37.16.141:3000';
     
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.style.display = 'none';
     });
 
-    // --- Lógica de Login (Corrigida) ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         const email = document.getElementById('login-email').value;
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA DE CADASTRO (Adicionada) ---
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         

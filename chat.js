@@ -85,24 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchContacts(); // Atualiza a lista de contatos
     });
 
-    // --- CORREÇÃO: Envio de Mensagem ---
     messageForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const messageText = messageInput.value.trim();
         
         if (messageText && currentContactId) {
-            // 1. Exibe a mensagem localmente (para o próprio usuário) IMEDIATAMENTE.
             displayMessage(userId, messageText); 
             scrollToBottom(); // Rola para o final
 
-            // 2. Envia a mensagem para o servidor
             socket.emit('private message', {
                 senderId: userId,
                 receiverId: currentContactId,
                 messageText: messageText
             });
             
-            // 3. Limpa o input
             messageInput.value = '';
         }
     });
@@ -356,7 +352,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchFriendRequests(); // Busca inicial para o badge
     
     
-    /* --- LÓGICA DO MENU RESPONSIVO --- */
     // Pega os elementos do menu que adicionamos no chat.html
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
