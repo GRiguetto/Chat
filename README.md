@@ -58,7 +58,7 @@ A aplicação foi hospedada em uma VM Azure para testar conectividade externa.
 * **Status:** A aplicação demonstrou estabilidade e responsividade ao ser acessada por dispositivos distintos (Celular e PC) simultaneamente.
 * **Monitoramento:** Acompanhamento de logs e status do servidor via terminal remoto.
 
-## 📝 Autor
+## Autor
 
 **Gabriel Fernandes Riguetto**
 Projeto desenvolvido para fins de estudo e portfólio.
